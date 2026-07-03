@@ -1,65 +1,737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Live Weather Center</title>
-  <link rel="stylesheet" href="css/main.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Live Weather Center</title>
+
+<style>
+:root {
+  --bg: #eef2f7;
+  --panel: rgba(255,255,255,.92);
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: rgba(15,23,42,.16);
+  --header: #07111f;
+  --accent: #2563eb;
+  --shadow: 0 18px 35px rgba(15,23,42,.14);
+}
+
+body.dark {
+  --bg: #07111f;
+  --panel: rgba(15,23,42,.88);
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: rgba(148,163,184,.25);
+  --header: #020617;
+  --accent: #38bdf8;
+  --shadow: 0 18px 35px rgba(0,0,0,.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(37,99,235,.18), transparent 35%),
+    var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  max-width: 1500px;
+  margin: auto;
+  padding: 16px 12px 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.brand {
+  font-size: 26px;
+  font-weight: 950;
+  letter-spacing: 1px;
+}
+
+.mode-btn {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.updated {
+  max-width: 1500px;
+  margin: 0 auto 12px;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.dashboard {
+  max-width: 1500px;
+  margin: auto;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr .95fr;
+  gap: 18px;
+}
+
+.box {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  border-radius: 22px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.title {
+  background: var(--header);
+  color: white;
+  text-align: center;
+  font-weight: 950;
+  font-size: 22px;
+  padding: 12px;
+  letter-spacing: .7px;
+  text-transform: uppercase;
+}
+
+.current {
+  min-height: 310px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  padding: 25px;
+}
+
+.weather-icon {
+  font-size: 105px;
+  line-height: 1;
+  animation: floatIcon 3.5s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.temp {
+  font-size: 124px;
+  font-weight: 950;
+  line-height: .9;
+}
+
+.location {
+  font-size: 34px;
+  text-align: center;
+  font-weight: 900;
+  margin-top: 8px;
+}
+
+.condition {
+  text-align: center;
+  font-size: 20px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.stat-value {
+  font-size: 62px;
+  text-align: center;
+  font-weight: 950;
+  padding: 26px 5px;
+}
+
+.alert-body {
+  background: #64748b;
+  color: white;
+  text-align: center;
+  font-size: 28px;
+  padding: 42px 10px;
+  min-height: 160px;
+  font-weight: 950;
+}
+
+.search {
+  display: flex;
+  height: 64px;
+  margin-bottom: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 20px;
+  padding: 0 14px;
+  outline: none;
+  text-transform: uppercase;
+  min-width: 0;
+}
+
+.search button {
+  width: 74px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 11px 8px;
+  text-align: left;
+}
+
+td b { font-size: 20px; }
+
+.inline-icon {
+  font-size: 24px;
+  margin-right: 6px;
+}
+
+.daily-row {
+  display: grid;
+  grid-template-columns: 55px 85px 1fr 58px;
+  gap: 8px;
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 15px;
+}
+
+.small-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.small-box {
+  min-height: 145px;
+  text-align: center;
+}
+
+.small-value {
+  font-size: 30px;
+  padding: 25px 6px;
+  font-weight: 950;
+}
+
+.loading {
+  opacity: .65;
+}
+
+@media (max-width: 1000px) {
+  .dashboard { grid-template-columns: 1fr; }
+  .topbar { flex-direction: column; align-items: stretch; }
+  .brand { text-align: center; }
+  .current { flex-direction: column; gap: 12px; }
+  .temp { font-size: 88px; }
+  .location { font-size: 27px; }
+  .stat-value { font-size: 48px; }
+}
+</style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="brand">LIVE WEATHER CENTER</div>
 
+<div class="topbar">
+  <div class="brand">LIVE WEATHER CENTER</div>
+  <button class="mode-btn" id="modeToggle">DARK MODE</button>
+</div>
+
+<div class="updated" id="updatedText">Updating weather data...</div>
+
+<div class="dashboard">
+
+  <div>
+    <div class="box current">
+      <div>
+        <div id="weatherIcon" class="weather-icon">⛅</div>
+        <div id="locationName" class="location">LOADING...</div>
+        <div id="conditionText" class="condition">Current Conditions</div>
+      </div>
+      <div id="currentTemp" class="temp">--°</div>
+    </div>
+
+    <br>
+
+    <div class="box">
+      <div class="title">Hourly</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Temp</th>
+            <th>Description</th>
+            <th>Rain</th>
+            <th>Dew Pt</th>
+          </tr>
+        </thead>
+        <tbody id="hourlyTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="stats">
+      <div class="box"><div class="title">High</div><div id="highTemp" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">Low</div><div id="lowTemp" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">Feels Like</div><div id="feelsLike" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">Humidity</div><div id="humidity" class="stat-value">--%</div></div>
+    </div>
+
+    <br>
+
+    <div class="box">
+      <div class="title">Current Alerts</div>
+      <div id="alertsBox" class="alert-body">CHECKING...</div>
+    </div>
+
+    <br>
+
+    <div class="small-grid">
+      <div class="box small-box">
+        <div class="title">Air Quality</div>
+        <div id="airQuality" class="small-value">N/A</div>
+      </div>
+
+      <div class="box small-box">
+        <div class="title">Pressure</div>
+        <div id="pressure" class="small-value">-- mb</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
     <form id="searchForm" class="search">
-      <input id="searchInput" placeholder="Search city, ZIP, or K-code" />
-      <button type="submit">Search</button>
+      <input id="searchInput" placeholder="SEARCH LOCATION" />
+      <button type="submit">🔍</button>
     </form>
 
-    <button id="themeToggle" class="theme-btn">Dark Mode</button>
-  </header>
+    <div class="box">
+      <div class="title">Daily</div>
+      <div id="dailyList"></div>
+    </div>
 
-  <main class="dashboard">
-    <section class="hero-card">
-      <div>
-        <img id="currentIcon" class="current-icon" src="" alt="Weather icon" />
-        <h1 id="locationName">Loading...</h1>
-        <p id="conditionText">Current Conditions</p>
+    <br>
+
+    <div class="small-grid">
+      <div class="box small-box">
+        <div class="title" id="sunTitle">Sunrise</div>
+        <div id="sunTime" class="small-value">--</div>
       </div>
-      <div id="currentTemp" class="big-temp">--°</div>
-    </section>
 
-    <section class="grid-4">
-      <div class="card"><h2>High</h2><p id="highTemp">--°</p></div>
-      <div class="card"><h2>Low</h2><p id="lowTemp">--°</p></div>
-      <div class="card"><h2>Feels Like</h2><p id="feelsLike">--°</p></div>
-      <div class="card"><h2>Humidity</h2><p id="humidity">--%</p></div>
-    </section>
+      <div class="box small-box">
+        <div class="title">UV Index</div>
+        <div id="uvIndex" class="small-value">--</div>
+      </div>
+    </div>
+  </div>
 
-    <section class="card alert-card">
-      <h2>Current Alerts</h2>
-      <div id="alertsBox">Checking...</div>
-    </section>
+</div>
 
-    <section class="card">
-      <h2>Hourly Forecast</h2>
-      <div id="hourlyList" class="hourly-list"></div>
-    </section>
+<script>
+const stateNames = {
+  AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California",
+  CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia",
+  HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa",
+  KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland",
+  MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi",
+  MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire",
+  NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina",
+  ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania",
+  RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee",
+  TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington",
+  WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"District of Columbia"
+};
 
-    <section class="card">
-      <h2>Daily Forecast</h2>
-      <div id="dailyList" class="daily-list"></div>
-    </section>
+async function getJSON(url, headers = {}) {
+  const res = await fetch(url, { headers });
+  if (!res.ok) throw new Error("Unable to load data");
+  return res.json();
+}
 
-    <section class="grid-3">
-      <div class="card"><h2 id="sunTitle">Sunrise</h2><p id="sunTime">--</p></div>
-      <div class="card"><h2>Pressure</h2><p id="pressure">-- mb</p></div>
-      <div class="card"><h2>UV Index</h2><p id="uvIndex">--</p></div>
-    </section>
+function cToF(c) {
+  return Math.round((c * 9 / 5) + 32);
+}
 
-    <p id="updatedText" class="updated">Updating weather data...</p>
-  </main>
+function getWeatherIcon(text = "", isDaytime = true) {
+  const t = text.toLowerCase();
 
-  <script type="module" src="js/app.js"></script>
+  if (t.includes("tornado")) return "🌪️";
+  if (t.includes("hurricane")) return "🌀";
+  if (t.includes("thunder")) return "⛈️";
+  if (t.includes("snow")) return "❄️";
+  if (t.includes("sleet") || t.includes("ice") || t.includes("freezing")) return "🌨️";
+  if (t.includes("rain") || t.includes("showers") || t.includes("drizzle")) return "🌧️";
+  if (t.includes("fog") || t.includes("mist") || t.includes("haze")) return "🌫️";
+  if (t.includes("wind")) return "🌬️";
+  if (t.includes("partly cloudy") || t.includes("partly sunny")) return isDaytime ? "⛅" : "☁️";
+  if (t.includes("mostly sunny")) return "🌤️";
+  if (t.includes("mostly clear")) return "🌙";
+  if (t.includes("mostly cloudy")) return "🌥️";
+  if (t.includes("cloudy") || t.includes("overcast")) return "☁️";
+  if (t.includes("sunny") || t.includes("clear")) return isDaytime ? "☀️" : "🌙";
+
+  return isDaytime ? "⛅" : "🌙";
+}
+
+function heatIndex(temp, rh) {
+  if (temp < 80 || rh < 40) return temp;
+
+  return Math.round(
+    -42.379 + 2.04901523 * temp + 10.14333127 * rh
+    - .22475541 * temp * rh
+    - .00683783 * temp * temp
+    - .05481717 * rh * rh
+    + .00122874 * temp * temp * rh
+    + .00085282 * temp * rh * rh
+    - .00000199 * temp * temp * rh * rh
+  );
+}
+
+function formatTime(date, timeZone) {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone
+  }).format(date);
+}
+
+function formatHour(dateString, timeZone) {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    timeZone
+  }).format(new Date(dateString));
+}
+
+function localDateString(timeZone, addDays = 0) {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(now);
+
+  const y = parts.find(p => p.type === "year").value;
+  const m = parts.find(p => p.type === "month").value;
+  const d = parts.find(p => p.type === "day").value;
+
+  const local = new Date(`${y}-${m}-${d}T12:00:00Z`);
+  local.setUTCDate(local.getUTCDate() + addDays);
+
+  return local.toISOString().split("T")[0];
+}
+
+async function searchLocation(query) {
+  query = query.trim();
+  if (!query) throw new Error("Empty search");
+
+  if (/^K[A-Z0-9]{3}$/i.test(query)) {
+    const station = await getJSON(
+      `https://api.weather.gov/stations/${query.toUpperCase()}`,
+      { "Accept": "application/geo+json" }
+    );
+
+    const coords = station.geometry.coordinates;
+
+    return {
+      lat: coords[1],
+      lon: coords[0],
+      name: query.toUpperCase()
+    };
+  }
+
+  if (/^\d{5}$/.test(query)) {
+    const zip = await fetch(`https://api.zippopotam.us/us/${query}`).then(r => {
+      if (!r.ok) throw new Error("ZIP not found");
+      return r.json();
+    });
+
+    const place = zip.places[0];
+
+    return {
+      lat: Number(place.latitude),
+      lon: Number(place.longitude),
+      name: `${place["place name"]}, ${place["state abbreviation"]}`
+    };
+  }
+
+  let cityQuery = query;
+  let stateFilter = "";
+
+  if (query.includes(",")) {
+    const parts = query.split(",");
+    cityQuery = parts[0].trim();
+    stateFilter = parts[1].trim().toUpperCase();
+  }
+
+  const geoURL =
+    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityQuery)}&count=25&language=en&format=json`;
+
+  const data = await fetch(geoURL).then(r => r.json());
+
+  if (!data.results || data.results.length === 0) {
+    throw new Error("Location not found");
+  }
+
+  let results = data.results.filter(place => place.country_code === "US");
+
+  if (stateFilter) {
+    const wantedState = stateNames[stateFilter] || stateFilter;
+    const filtered = results.filter(place =>
+      (place.admin1 || "").toLowerCase() === wantedState.toLowerCase()
+    );
+    if (filtered.length > 0) results = filtered;
+  }
+
+  const match = results[0] || data.results[0];
+
+  return {
+    lat: match.latitude,
+    lon: match.longitude,
+    name: `${match.name}, ${match.admin1 || match.country_code}`
+  };
+}
+
+async function getSunData(lat, lon, timeZone) {
+  const today = localDateString(timeZone, 0);
+
+  const todayData = await fetch(
+    `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${today}&formatted=0`
+  ).then(r => r.json());
+
+  const sunrise = new Date(todayData.results.sunrise);
+  const sunset = new Date(todayData.results.sunset);
+  const now = new Date();
+
+  if (now < sunrise) {
+    document.getElementById("sunTitle").textContent = "Sunrise";
+    document.getElementById("sunTime").textContent = formatTime(sunrise, timeZone);
+  } else if (now < sunset) {
+    document.getElementById("sunTitle").textContent = "Sunset";
+    document.getElementById("sunTime").textContent = formatTime(sunset, timeZone);
+  } else {
+    const tomorrow = localDateString(timeZone, 1);
+
+    const tomorrowData = await fetch(
+      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${tomorrow}&formatted=0`
+    ).then(r => r.json());
+
+    const tomorrowSunrise = new Date(tomorrowData.results.sunrise);
+
+    document.getElementById("sunTitle").textContent = "Sunrise";
+    document.getElementById("sunTime").textContent = formatTime(tomorrowSunrise, timeZone);
+  }
+}
+
+function alertColor(event = "") {
+  const e = event.toLowerCase();
+
+  if (e.includes("tornado")) return "#dc2626";
+  if (e.includes("flash flood emergency")) return "#7c3aed";
+  if (e.includes("severe thunderstorm")) return "#f97316";
+  if (e.includes("warning")) return "#dc2626";
+  if (e.includes("watch")) return "#eab308";
+  if (e.includes("flood")) return "#16a34a";
+  if (e.includes("advisory")) return "#0ea5e9";
+
+  return "#64748b";
+}
+
+function estimateUV() {
+  const hour = new Date().getHours();
+
+  if (hour < 9 || hour > 17) return "LOW";
+  if (hour >= 11 && hour <= 15) return "HIGH";
+
+  return "MODERATE";
+}
+
+async function loadWeather(lat, lon, customName = "") {
+  document.body.classList.add("loading");
+  document.getElementById("locationName").textContent = "LOADING...";
+
+  try {
+    const point = await getJSON(
+      `https://api.weather.gov/points/${lat},${lon}`,
+      { "Accept": "application/geo+json" }
+    );
+
+    const timeZone = point.properties.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const city = point.properties.relativeLocation.properties.city;
+    const state = point.properties.relativeLocation.properties.state;
+
+    document.getElementById("locationName").textContent =
+      customName || `${city}, ${state}`;
+
+    const forecast = await getJSON(point.properties.forecast, { "Accept": "application/geo+json" });
+    const hourly = await getJSON(point.properties.forecastHourly, { "Accept": "application/geo+json" });
+    const stations = await getJSON(point.properties.observationStations, { "Accept": "application/geo+json" });
+
+    const stationID = stations.features[0].properties.stationIdentifier;
+    const obs = await getJSON(
+      `https://api.weather.gov/stations/${stationID}/observations/latest`,
+      { "Accept": "application/geo+json" }
+    );
+
+    const alerts = await getJSON(
+      `https://api.weather.gov/alerts/active?point=${lat},${lon}`,
+      { "Accept": "application/geo+json" }
+    );
+
+    const currentHour = hourly.properties.periods[0];
+    const currentObs = obs.properties;
+
+    const tempF = currentObs.temperature.value !== null
+      ? cToF(currentObs.temperature.value)
+      : currentHour.temperature;
+
+    const rh = currentObs.relativeHumidity.value !== null
+      ? Math.round(currentObs.relativeHumidity.value)
+      : "--";
+
+    const dewPoint = currentObs.dewpoint.value !== null
+      ? cToF(currentObs.dewpoint.value)
+      : "--";
+
+    const pressure = currentObs.barometricPressure.value !== null
+      ? Math.round(currentObs.barometricPressure.value / 100)
+      : "--";
+
+    document.getElementById("currentTemp").textContent = `${tempF}°`;
+    document.getElementById("conditionText").textContent = currentHour.shortForecast;
+    document.getElementById("weatherIcon").textContent =
+      getWeatherIcon(currentHour.shortForecast, currentHour.isDaytime);
+
+    document.getElementById("humidity").textContent = rh === "--" ? "--" : `${rh}%`;
+    document.getElementById("feelsLike").textContent =
+      rh === "--" ? `${tempF}°` : `${heatIndex(tempF, rh)}°`;
+
+    document.getElementById("pressure").textContent =
+      pressure === "--" ? "--" : `${pressure} mb`;
+
+    const dayPeriods = forecast.properties.periods.slice(0, 2).map(p => p.temperature);
+    document.getElementById("highTemp").textContent = `${Math.max(...dayPeriods)}°`;
+    document.getElementById("lowTemp").textContent = `${Math.min(...dayPeriods)}°`;
+
+    document.getElementById("hourlyTable").innerHTML =
+      hourly.properties.periods.slice(0, 9).map(p => `
+        <tr>
+          <td>${formatHour(p.startTime, timeZone)}</td>
+          <td><b>${p.temperature}°</b></td>
+          <td><span class="inline-icon">${getWeatherIcon(p.shortForecast, p.isDaytime)}</span>${p.shortForecast}</td>
+          <td>${p.probabilityOfPrecipitation.value ?? 0}%</td>
+          <td>${dewPoint}°</td>
+        </tr>
+      `).join("");
+
+    document.getElementById("dailyList").innerHTML =
+      forecast.properties.periods
+        .filter(p => p.isDaytime)
+        .slice(0, 7)
+        .map(p => `
+          <div class="daily-row">
+            <b>${p.name.slice(0, 3).toUpperCase()}</b>
+            <span>${getWeatherIcon(p.shortForecast, true)} ${p.temperature}°</span>
+            <span>${p.shortForecast}</span>
+            <span>${p.probabilityOfPrecipitation.value ?? 0}%</span>
+          </div>
+        `).join("");
+
+    const alertBox = document.getElementById("alertsBox");
+
+    if (alerts.features.length > 0) {
+      const alert = alerts.features[0].properties;
+      alertBox.style.background = alertColor(alert.event);
+      alertBox.innerHTML = `
+        ${alert.event}
+        <br><br>
+        <small>
+          UNTIL ${alert.ends ? formatTime(new Date(alert.ends), timeZone) : "FURTHER NOTICE"}
+        </small>
+      `;
+    } else {
+      alertBox.style.background = "#64748b";
+      alertBox.textContent = "NO ACTIVE ALERTS";
+    }
+
+    await getSunData(lat, lon, timeZone);
+
+    document.getElementById("uvIndex").textContent = estimateUV();
+
+    document.getElementById("updatedText").textContent =
+      `Last updated: ${formatTime(new Date(), timeZone)}`;
+
+  } catch (err) {
+    console.error(err);
+    alert("Weather data unavailable for this location.");
+  } finally {
+    document.body.classList.remove("loading");
+  }
+}
+
+document.getElementById("searchForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  try {
+    const input = document.getElementById("searchInput").value;
+    const loc = await searchLocation(input);
+    await loadWeather(loc.lat, loc.lon, loc.name);
+  } catch (err) {
+    console.error(err);
+    alert("Location not found. Try Jackson, MS, Atlanta, GA, 30303, KJAN, or KATL.");
+  }
+});
+
+document.getElementById("modeToggle").addEventListener("click", function() {
+  document.body.classList.toggle("dark");
+  this.textContent = document.body.classList.contains("dark") ? "LIGHT MODE" : "DARK MODE";
+});
+
+function startApp() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      pos => loadWeather(pos.coords.latitude, pos.coords.longitude),
+      () => loadWeather(33.749, -84.388, "ATLANTA, GA")
+    );
+  } else {
+    loadWeather(33.749, -84.388, "ATLANTA, GA");
+  }
+}
+
+startApp();
+</script>
+
 </body>
 </html>
