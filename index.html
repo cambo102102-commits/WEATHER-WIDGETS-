@@ -6,138 +6,156 @@
 <title>Live Weather Dashboard</title>
 
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: white;
-    color: black;
-  }
+* { box-sizing: border-box; }
 
-  .dashboard {
-    width: 100%;
-    max-width: 1500px;
-    margin: auto;
-    padding: 12px;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr .9fr;
-    gap: 18px;
-  }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: white;
+  color: black;
+}
 
-  .box {
-    border: 3px solid #222;
-    background: white;
-  }
+.dashboard {
+  max-width: 1500px;
+  margin: auto;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr .9fr;
+  gap: 18px;
+}
 
-  .title {
-    background: black;
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    font-size: 26px;
-    padding: 10px;
-  }
+.box {
+  border: 3px solid #222;
+  background: white;
+}
 
-  .current {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    min-height: 280px;
-  }
+.title {
+  background: black;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 26px;
+  padding: 10px;
+}
 
-  .icon { font-size: 95px; }
-  .temp { font-size: 120px; font-weight: bold; }
-  .location { font-size: 38px; text-align: center; }
+.current {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  min-height: 280px;
+}
 
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-  }
+.weather-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
 
-  .stat-value {
-    font-size: 70px;
-    text-align: center;
-    padding: 22px 5px;
-  }
+.temp {
+  font-size: 120px;
+  font-weight: bold;
+}
 
-  .alerts .alert-body {
-    background: #e86f00;
-    color: white;
-    text-align: center;
-    font-size: 34px;
-    padding: 45px 10px;
-    min-height: 160px;
-  }
+.location {
+  font-size: 38px;
+  text-align: center;
+}
 
-  .small-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
 
-  .small-box {
-    min-height: 145px;
-    text-align: center;
-  }
+.stat-value {
+  font-size: 70px;
+  text-align: center;
+  padding: 22px 5px;
+}
 
-  .small-value {
-    font-size: 34px;
-    padding: 24px 6px;
-  }
+.alert-body {
+  background: #777;
+  color: white;
+  text-align: center;
+  font-size: 34px;
+  padding: 45px 10px;
+  min-height: 160px;
+}
 
-  .search {
-    display: flex;
-    border: 3px solid #222;
-    height: 70px;
-    margin-bottom: 48px;
-  }
+.search {
+  display: flex;
+  border: 3px solid #222;
+  height: 70px;
+  margin-bottom: 48px;
+}
 
-  .search input {
-    flex: 1;
-    border: none;
-    font-size: 26px;
-    padding: 10px;
-    text-transform: uppercase;
-  }
+.search input {
+  flex: 1;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  text-transform: uppercase;
+}
 
-  .search button {
-    width: 75px;
-    border: none;
-    background: white;
-    font-size: 38px;
-    cursor: pointer;
-  }
+.search button {
+  width: 75px;
+  border: none;
+  background: white;
+  font-size: 34px;
+  cursor: pointer;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
 
-  th, td {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 6px;
-    text-align: left;
-  }
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 6px;
+  text-align: left;
+}
 
-  .daily-row {
-    display: grid;
-    grid-template-columns: 50px 70px 1fr 55px;
-    gap: 8px;
-    padding: 13px 8px;
-    border-bottom: 1px solid #ddd;
-    align-items: center;
-    font-size: 15px;
-  }
+.inline-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+}
 
-  @media (max-width: 900px) {
-    .dashboard { grid-template-columns: 1fr; }
-    .temp { font-size: 85px; }
-    .location { font-size: 28px; }
-    .stat-value { font-size: 52px; }
-  }
+.daily-row {
+  display: grid;
+  grid-template-columns: 50px 70px 1fr 55px;
+  gap: 8px;
+  padding: 13px 8px;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+  font-size: 15px;
+}
+
+.small-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.small-box {
+  min-height: 145px;
+  text-align: center;
+}
+
+.small-value {
+  font-size: 34px;
+  padding: 24px 6px;
+}
+
+@media (max-width: 900px) {
+  .dashboard { grid-template-columns: 1fr; }
+  .temp { font-size: 85px; }
+  .location { font-size: 28px; }
+  .stat-value { font-size: 52px; }
+}
 </style>
 </head>
 
@@ -148,7 +166,7 @@
   <div>
     <div class="box current">
       <div>
-        <div id="weatherIcon" class="icon">⛅</div>
+        <img id="weatherIcon" class="weather-img" alt="Weather icon">
         <div id="locationName" class="location">LOADING...</div>
       </div>
       <div id="currentTemp" class="temp">--°</div>
@@ -198,7 +216,7 @@
 
     <br>
 
-    <div class="box alerts">
+    <div class="box">
       <div class="title">CURRENT ALERTS</div>
       <div id="alertsBox" class="alert-body">CHECKING...</div>
     </div>
@@ -221,7 +239,7 @@
   <div>
     <form id="searchForm" class="search">
       <input id="searchInput" placeholder="SEARCH LOCATION" />
-      <button>🔍</button>
+      <button type="submit">🔍</button>
     </form>
 
     <div class="box">
@@ -247,65 +265,56 @@
 </div>
 
 <script>
-const NWS_HEADERS = {
-  "Accept": "application/geo+json"
-};
-
 async function getJSON(url) {
-  const res = await fetch(url, { headers: NWS_HEADERS });
-  if (!res.ok) throw new Error("Weather data unavailable");
-  return res.json();
+  const res = await fetch(url, {
+    headers: { "Accept": "application/geo+json" }
+  });
+
+  if (!res.ok) {
+    throw new Error("Unable to load: " + url);
+  }
+
+  return await res.json();
 }
 
 function cToF(c) {
-  return Math.round((c * 9/5) + 32);
-}
-
-function mbToInHg(mb) {
-  return (mb * 0.02953).toFixed(2);
-}
-
-function getIcon(text = "") {
-  text = text.toLowerCase();
-  if (text.includes("thunder")) return "⛈️";
-  if (text.includes("rain") || text.includes("showers")) return "🌧️";
-  if (text.includes("cloud")) return "☁️";
-  if (text.includes("sun") || text.includes("clear")) return "☀️";
-  if (text.includes("snow")) return "❄️";
-  if (text.includes("fog")) return "🌫️";
-  return "⛅";
+  return Math.round((c * 9 / 5) + 32);
 }
 
 function heatIndex(temp, rh) {
   if (temp < 80 || rh < 40) return temp;
+
   return Math.round(
-    -42.379 + 2.04901523*temp + 10.14333127*rh
-    - .22475541*temp*rh - .00683783*temp*temp
-    - .05481717*rh*rh + .00122874*temp*temp*rh
-    + .00085282*temp*rh*rh - .00000199*temp*temp*rh*rh
+    -42.379 + 2.04901523 * temp + 10.14333127 * rh
+    - .22475541 * temp * rh
+    - .00683783 * temp * temp
+    - .05481717 * rh * rh
+    + .00122874 * temp * temp * rh
+    + .00085282 * temp * rh * rh
+    - .00000199 * temp * temp * rh * rh
   );
 }
 
-async function cityToCoords(query) {
+async function searchLocation(query) {
   query = query.trim();
 
+  if (!query) throw new Error("Empty search");
+
   if (/^K[A-Z0-9]{3}$/i.test(query)) {
-    const metar = await getJSON(
-      `https://aviationweather.gov/api/data/metar?ids=${query.toUpperCase()}&format=json`
-    );
-    if (metar[0]?.lat && metar[0]?.lon) {
-      return {
-        lat: metar[0].lat,
-        lon: metar[0].lon,
-        name: query.toUpperCase()
-      };
-    }
+    const station = await getJSON(`https://api.weather.gov/stations/${query.toUpperCase()}`);
+    const coords = station.geometry.coordinates;
+
+    return {
+      lat: coords[1],
+      lon: coords[0],
+      name: query.toUpperCase()
+    };
   }
 
-  const url =
+  const censusURL =
     `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${encodeURIComponent(query)}&benchmark=Public_AR_Current&format=json`;
 
-  const data = await fetch(url).then(r => r.json());
+  const data = await fetch(censusURL).then(r => r.json());
   const match = data.result.addressMatches[0];
 
   if (!match) throw new Error("Location not found");
@@ -317,89 +326,107 @@ async function cityToCoords(query) {
   };
 }
 
-async function loadWeather(lat, lon, fallbackName = "") {
+async function loadWeather(lat, lon, customName = "") {
+  document.getElementById("locationName").textContent = "LOADING...";
+
   const point = await getJSON(`https://api.weather.gov/points/${lat},${lon}`);
 
-  const props = point.properties;
-  const city = props.relativeLocation?.properties?.city || fallbackName;
-  const state = props.relativeLocation?.properties?.state || "";
+  const city = point.properties.relativeLocation.properties.city;
+  const state = point.properties.relativeLocation.properties.state;
 
   document.getElementById("locationName").textContent =
-    fallbackName || `${city}, ${state}`;
+    customName || `${city}, ${state}`;
 
-  const forecast = await getJSON(props.forecast);
-  const hourly = await getJSON(props.forecastHourly);
-  const stations = await getJSON(props.observationStations);
-  const stationId = stations.features[0].properties.stationIdentifier;
-  const obs = await getJSON(`https://api.weather.gov/stations/${stationId}/observations/latest`);
+  const forecast = await getJSON(point.properties.forecast);
+  const hourly = await getJSON(point.properties.forecastHourly);
+  const stations = await getJSON(point.properties.observationStations);
+
+  const stationID = stations.features[0].properties.stationIdentifier;
+  const obs = await getJSON(`https://api.weather.gov/stations/${stationID}/observations/latest`);
+
   const alerts = await getJSON(`https://api.weather.gov/alerts/active?point=${lat},${lon}`);
 
-  const current = obs.properties;
-  const tempF = current.temperature?.value !== null
-    ? cToF(current.temperature.value)
-    : hourly.properties.periods[0].temperature;
+  const currentHour = hourly.properties.periods[0];
+  const currentObs = obs.properties;
 
-  const rh = current.relativeHumidity?.value
-    ? Math.round(current.relativeHumidity.value)
+  const tempF = currentObs.temperature.value !== null
+    ? cToF(currentObs.temperature.value)
+    : currentHour.temperature;
+
+  const rh = currentObs.relativeHumidity.value !== null
+    ? Math.round(currentObs.relativeHumidity.value)
     : "--";
 
-  const dew = current.dewpoint?.value !== null
-    ? cToF(current.dewpoint.value)
+  const dewPoint = currentObs.dewpoint.value !== null
+    ? cToF(currentObs.dewpoint.value)
     : "--";
 
-  const pressureMb = current.barometricPressure?.value
-    ? Math.round(current.barometricPressure.value / 100)
+  const pressure = currentObs.barometricPressure.value !== null
+    ? Math.round(currentObs.barometricPressure.value / 100)
     : "--";
-
-  const short = hourly.properties.periods[0].shortForecast;
 
   document.getElementById("currentTemp").textContent = `${tempF}°`;
-  document.getElementById("weatherIcon").textContent = getIcon(short);
+  document.getElementById("weatherIcon").src = currentHour.icon;
+  document.getElementById("weatherIcon").alt = currentHour.shortForecast;
+
   document.getElementById("humidity").textContent = `${rh}%`;
   document.getElementById("feelsLike").textContent =
     rh === "--" ? `${tempF}°` : `${heatIndex(tempF, rh)}°`;
+
   document.getElementById("pressure").textContent =
-    pressureMb === "--" ? "--" : `${pressureMb} mb / ${mbToInHg(pressureMb)} in`;
+    pressure === "--" ? "--" : `${pressure} mb`;
 
-  const todayPeriods = forecast.properties.periods.slice(0, 2);
-  document.getElementById("highTemp").textContent =
-    `${Math.max(...todayPeriods.map(p => p.temperature))}°`;
-  document.getElementById("lowTemp").textContent =
-    `${Math.min(...todayPeriods.map(p => p.temperature))}°`;
+  const dayTemps = forecast.properties.periods.slice(0, 2).map(p => p.temperature);
 
-  const hourlyRows = hourly.properties.periods.slice(0, 9).map(p => `
-    <tr>
-      <td>${new Date(p.startTime).toLocaleTimeString([], {hour:"numeric"})}</td>
-      <td><b>${p.temperature}°</b></td>
-      <td>${getIcon(p.shortForecast)} ${p.shortForecast}</td>
-      <td>${p.probabilityOfPrecipitation?.value ?? 0}%</td>
-      <td>${dew}°</td>
-    </tr>
-  `).join("");
+  document.getElementById("highTemp").textContent = `${Math.max(...dayTemps)}°`;
+  document.getElementById("lowTemp").textContent = `${Math.min(...dayTemps)}°`;
 
-  document.getElementById("hourlyTable").innerHTML = hourlyRows;
-
-  const dailyRows = forecast.properties.periods.slice(0, 14)
-    .filter(p => p.isDaytime)
-    .slice(0, 7)
-    .map(p => `
-      <div class="daily-row">
-        <b>${p.name.slice(0,3).toUpperCase()}</b>
-        <span>${getIcon(p.shortForecast)} ${p.temperature}°</span>
-        <span>${p.shortForecast}</span>
-        <span>${p.probabilityOfPrecipitation?.value ?? 0}%</span>
-      </div>
+  document.getElementById("hourlyTable").innerHTML =
+    hourly.properties.periods.slice(0, 9).map(p => `
+      <tr>
+        <td>${new Date(p.startTime).toLocaleTimeString([], { hour: "numeric" })}</td>
+        <td><b>${p.temperature}°</b></td>
+        <td>
+          <img class="inline-icon" src="${p.icon}" alt="${p.shortForecast}">
+          ${p.shortForecast}
+        </td>
+        <td>${p.probabilityOfPrecipitation.value ?? 0}%</td>
+        <td>${dewPoint}°</td>
+      </tr>
     `).join("");
 
-  document.getElementById("dailyList").innerHTML = dailyRows;
+  document.getElementById("dailyList").innerHTML =
+    forecast.properties.periods
+      .filter(p => p.isDaytime)
+      .slice(0, 7)
+      .map(p => `
+        <div class="daily-row">
+          <b>${p.name.slice(0, 3).toUpperCase()}</b>
+          <span>
+            <img class="inline-icon" src="${p.icon}" alt="${p.shortForecast}">
+            ${p.temperature}°
+          </span>
+          <span>${p.shortForecast}</span>
+          <span>${p.probabilityOfPrecipitation.value ?? 0}%</span>
+        </div>
+      `).join("");
+
+  const alertBox = document.getElementById("alertsBox");
 
   if (alerts.features.length > 0) {
     const alert = alerts.features[0].properties;
-    document.getElementById("alertsBox").innerHTML =
-      `${alert.event}<br><br><small>UNTIL ${new Date(alert.ends).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})}</small>`;
+    alertBox.style.background = "#e86f00";
+    alertBox.innerHTML = `
+      ${alert.event}
+      <br><br>
+      <small>UNTIL ${alert.ends ? new Date(alert.ends).toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      }) : "FURTHER NOTICE"}</small>
+    `;
   } else {
-    document.getElementById("alertsBox").style.background = "#777";
-    document.getElementById("alertsBox").textContent = "NO ACTIVE ALERTS";
+    alertBox.style.background = "#777";
+    alertBox.textContent = "NO ACTIVE ALERTS";
   }
 
   document.getElementById("uvIndex").textContent = estimateUV();
@@ -408,6 +435,7 @@ async function loadWeather(lat, lon, fallbackName = "") {
 
 function estimateUV() {
   const hour = new Date().getHours();
+
   if (hour < 9 || hour > 17) return "LOW";
   if (hour >= 11 && hour <= 15) return "HIGH";
   return "MODERATE";
@@ -418,28 +446,36 @@ function moonPhase() {
   const lp = 2551443;
   const now = new Date() / 1000;
   const newMoon = new Date("2001-01-24T13:07:00Z") / 1000;
-  return phases[Math.floor(((now - newMoon) % lp) / lp * 8)];
+  const phase = Math.floor(((now - newMoon) % lp) / lp * 8);
+  return phases[phase];
 }
 
-function useDeviceLocation() {
-  navigator.geolocation.getCurrentPosition(
-    pos => loadWeather(pos.coords.latitude, pos.coords.longitude),
-    () => loadWeather(33.749, -84.388, "ATLANTA, GA")
-  );
-}
-
-document.getElementById("searchForm").addEventListener("submit", async e => {
+document.getElementById("searchForm").addEventListener("submit", async function(e) {
   e.preventDefault();
+
+  const input = document.getElementById("searchInput").value;
+
   try {
-    const q = document.getElementById("searchInput").value;
-    const loc = await cityToCoords(q);
-    loadWeather(loc.lat, loc.lon, loc.name);
-  } catch {
-    alert("Location not found or weather data unavailable.");
+    const loc = await searchLocation(input);
+    await loadWeather(loc.lat, loc.lon, loc.name);
+  } catch (err) {
+    alert("Location not found. Try Atlanta, GA, 30303, or KATL.");
+    console.error(err);
   }
 });
 
-useDeviceLocation();
+function startApp() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      pos => loadWeather(pos.coords.latitude, pos.coords.longitude),
+      () => loadWeather(33.749, -84.388, "ATLANTA, GA")
+    );
+  } else {
+    loadWeather(33.749, -84.388, "ATLANTA, GA");
+  }
+}
+
+startApp();
 </script>
 
 </body>
