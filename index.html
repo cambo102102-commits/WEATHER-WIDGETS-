@@ -6,13 +6,57 @@
 <title>Live Weather Dashboard</title>
 
 <style>
+:root {
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --text: #111;
+  --border: #1f2933;
+  --header: #050505;
+  --accent: #2563eb;
+  --muted: #666;
+}
+
+body.dark {
+  --bg: #0b1117;
+  --panel: #121a23;
+  --text: #f5f5f5;
+  --border: #334155;
+  --header: #000;
+  --accent: #38bdf8;
+  --muted: #b8c1cc;
+}
+
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: white;
-  color: black;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  max-width: 1500px;
+  margin: auto;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.mode-btn {
+  border: 2px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: 10px 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .dashboard {
@@ -25,52 +69,62 @@ body {
 }
 
 .box {
-  border: 3px solid #222;
-  background: white;
+  border: 3px solid var(--border);
+  background: var(--panel);
+  box-shadow: 0 5px 14px rgba(0,0,0,.12);
 }
 
 .title {
-  background: black;
+  background: var(--header);
   color: white;
   text-align: center;
-  font-weight: bold;
-  font-size: 26px;
+  font-weight: 900;
+  font-size: 25px;
   padding: 10px;
+  letter-spacing: .5px;
 }
 
 .current {
+  min-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 30px;
-  min-height: 280px;
+  gap: 35px;
 }
 
-.weather-img {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
+.weather-icon {
+  font-size: 95px;
+  line-height: 1;
 }
 
 .temp {
   font-size: 120px;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 .location {
-  font-size: 38px;
+  font-size: 36px;
   text-align: center;
+  font-weight: 700;
+}
+
+.condition {
+  text-align: center;
+  font-size: 20px;
+  color: var(--muted);
+  margin-top: 6px;
 }
 
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  gap: 24px;
 }
 
 .stat-value {
-  font-size: 70px;
+  font-size: 66px;
   text-align: center;
+  font-weight: 800;
   padding: 22px 5px;
 }
 
@@ -78,30 +132,36 @@ body {
   background: #777;
   color: white;
   text-align: center;
-  font-size: 34px;
-  padding: 45px 10px;
+  font-size: 32px;
+  padding: 42px 10px;
   min-height: 160px;
+  font-weight: 800;
 }
 
 .search {
   display: flex;
-  border: 3px solid #222;
-  height: 70px;
-  margin-bottom: 48px;
+  border: 3px solid var(--border);
+  height: 68px;
+  margin-bottom: 38px;
+  background: var(--panel);
 }
 
 .search input {
   flex: 1;
   border: none;
-  font-size: 24px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 22px;
   padding: 10px;
   text-transform: uppercase;
+  outline: none;
 }
 
 .search button {
   width: 75px;
   border: none;
-  background: white;
+  background: var(--panel);
+  color: var(--text);
   font-size: 34px;
   cursor: pointer;
 }
@@ -113,23 +173,24 @@ table {
 }
 
 th, td {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 6px;
+  border-bottom: 1px solid rgba(150,150,150,.25);
+  padding: 10px 7px;
   text-align: left;
 }
 
+td b { font-size: 20px; }
+
 .inline-icon {
-  width: 32px;
-  height: 32px;
-  vertical-align: middle;
+  font-size: 24px;
+  margin-right: 6px;
 }
 
 .daily-row {
   display: grid;
-  grid-template-columns: 50px 70px 1fr 55px;
+  grid-template-columns: 55px 75px 1fr 55px;
   gap: 8px;
-  padding: 13px 8px;
-  border-bottom: 1px solid #ddd;
+  padding: 14px 8px;
+  border-bottom: 1px solid rgba(150,150,150,.25);
   align-items: center;
   font-size: 15px;
 }
@@ -146,28 +207,46 @@ th, td {
 }
 
 .small-value {
-  font-size: 34px;
+  font-size: 30px;
   padding: 24px 6px;
+  font-weight: 800;
+}
+
+.updated {
+  max-width: 1500px;
+  margin: 0 auto 12px auto;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 @media (max-width: 900px) {
   .dashboard { grid-template-columns: 1fr; }
-  .temp { font-size: 85px; }
+  .current { flex-direction: column; gap: 10px; }
+  .temp { font-size: 86px; }
   .location { font-size: 28px; }
-  .stat-value { font-size: 52px; }
+  .stat-value { font-size: 50px; }
 }
 </style>
 </head>
 
 <body>
 
+<div class="topbar">
+  <div class="brand">LIVE WEATHER CENTER</div>
+  <button class="mode-btn" id="modeToggle">DARK MODE</button>
+</div>
+
+<div class="updated" id="updatedText">Updating weather data...</div>
+
 <div class="dashboard">
 
   <div>
     <div class="box current">
       <div>
-        <img id="weatherIcon" class="weather-img" alt="Weather icon">
+        <div id="weatherIcon" class="weather-icon">⛅</div>
         <div id="locationName" class="location">LOADING...</div>
+        <div id="conditionText" class="condition">Current Conditions</div>
       </div>
       <div id="currentTemp" class="temp">--°</div>
     </div>
@@ -182,8 +261,8 @@ th, td {
             <th>TIME</th>
             <th>TEMP</th>
             <th>DESCRIPTION</th>
-            <th>PRECIP</th>
-            <th>DEW POINT</th>
+            <th>RAIN</th>
+            <th>DEW PT</th>
           </tr>
         </thead>
         <tbody id="hourlyTable"></tbody>
@@ -193,25 +272,10 @@ th, td {
 
   <div>
     <div class="stats">
-      <div class="box">
-        <div class="title">HIGH</div>
-        <div id="highTemp" class="stat-value">--°</div>
-      </div>
-
-      <div class="box">
-        <div class="title">LOW</div>
-        <div id="lowTemp" class="stat-value">--°</div>
-      </div>
-
-      <div class="box">
-        <div class="title">FEELS LIKE</div>
-        <div id="feelsLike" class="stat-value">--°</div>
-      </div>
-
-      <div class="box">
-        <div class="title">HUMIDITY</div>
-        <div id="humidity" class="stat-value">--%</div>
-      </div>
+      <div class="box"><div class="title">HIGH</div><div id="highTemp" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">LOW</div><div id="lowTemp" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">FEELS LIKE</div><div id="feelsLike" class="stat-value">--°</div></div>
+      <div class="box"><div class="title">HUMIDITY</div><div id="humidity" class="stat-value">--%</div></div>
     </div>
 
     <br>
@@ -251,8 +315,8 @@ th, td {
 
     <div class="small-grid">
       <div class="box small-box">
-        <div class="title">MOON PHASE</div>
-        <div id="moonPhase" class="small-value">--</div>
+        <div class="title" id="sunTitle">SUNRISE</div>
+        <div id="sunTime" class="small-value">--</div>
       </div>
 
       <div class="box small-box">
@@ -271,14 +335,31 @@ async function getJSON(url) {
   });
 
   if (!res.ok) {
-    throw new Error("Unable to load: " + url);
+    throw new Error("Unable to load data");
   }
 
-  return await res.json();
+  return res.json();
 }
 
 function cToF(c) {
   return Math.round((c * 9 / 5) + 32);
+}
+
+function getWeatherIcon(text = "", isDaytime = true) {
+  text = text.toLowerCase();
+
+  if (text.includes("thunder")) return "⛈️";
+  if (text.includes("snow")) return "❄️";
+  if (text.includes("sleet") || text.includes("ice") || text.includes("freezing")) return "🌨️";
+  if (text.includes("rain") || text.includes("showers")) return "🌧️";
+  if (text.includes("fog")) return "🌫️";
+  if (text.includes("wind")) return "🌬️";
+  if (text.includes("partly cloudy")) return isDaytime ? "⛅" : "☁️";
+  if (text.includes("mostly cloudy")) return "☁️";
+  if (text.includes("cloudy")) return "☁️";
+  if (text.includes("sunny") || text.includes("clear")) return isDaytime ? "☀️" : "🌙";
+
+  return isDaytime ? "⛅" : "🌙";
 }
 
 function heatIndex(temp, rh) {
@@ -311,19 +392,63 @@ async function searchLocation(query) {
     };
   }
 
-  const censusURL =
-    `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${encodeURIComponent(query)}&benchmark=Public_AR_Current&format=json`;
+  const geoURL =
+    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
 
-  const data = await fetch(censusURL).then(r => r.json());
-  const match = data.result.addressMatches[0];
+  const data = await fetch(geoURL).then(r => r.json());
 
-  if (!match) throw new Error("Location not found");
+  if (!data.results || data.results.length === 0) {
+    throw new Error("Location not found");
+  }
+
+  const usMatch =
+    data.results.find(place => place.country_code === "US") || data.results[0];
 
   return {
-    lat: match.coordinates.y,
-    lon: match.coordinates.x,
-    name: match.matchedAddress
+    lat: usMatch.latitude,
+    lon: usMatch.longitude,
+    name: `${usMatch.name}, ${usMatch.admin1 || usMatch.country_code}`
   };
+}
+
+async function getSunData(lat, lon) {
+  const todayURL =
+    `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0`;
+
+  const todayData = await fetch(todayURL).then(r => r.json());
+
+  const sunrise = new Date(todayData.results.sunrise);
+  const sunset = new Date(todayData.results.sunset);
+  const now = new Date();
+
+  if (now < sunrise) {
+    document.getElementById("sunTitle").textContent = "SUNRISE";
+    document.getElementById("sunTime").textContent =
+      sunrise.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  else if (now < sunset) {
+    document.getElementById("sunTitle").textContent = "SUNSET";
+    document.getElementById("sunTime").textContent =
+      sunset.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
+
+  else {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const dateString = tomorrow.toISOString().split("T")[0];
+
+    const tomorrowURL =
+      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&date=${dateString}&formatted=0`;
+
+    const tomorrowData = await fetch(tomorrowURL).then(r => r.json());
+    const tomorrowSunrise = new Date(tomorrowData.results.sunrise);
+
+    document.getElementById("sunTitle").textContent = "SUNRISE";
+    document.getElementById("sunTime").textContent =
+      tomorrowSunrise.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  }
 }
 
 async function loadWeather(lat, lon, customName = "") {
@@ -366,30 +491,29 @@ async function loadWeather(lat, lon, customName = "") {
     : "--";
 
   document.getElementById("currentTemp").textContent = `${tempF}°`;
-  document.getElementById("weatherIcon").src = currentHour.icon;
-  document.getElementById("weatherIcon").alt = currentHour.shortForecast;
+  document.getElementById("conditionText").textContent = currentHour.shortForecast;
+  document.getElementById("weatherIcon").textContent =
+    getWeatherIcon(currentHour.shortForecast, currentHour.isDaytime);
 
-  document.getElementById("humidity").textContent = `${rh}%`;
+  document.getElementById("humidity").textContent = rh === "--" ? "--" : `${rh}%`;
+
   document.getElementById("feelsLike").textContent =
     rh === "--" ? `${tempF}°` : `${heatIndex(tempF, rh)}°`;
 
   document.getElementById("pressure").textContent =
     pressure === "--" ? "--" : `${pressure} mb`;
 
-  const dayTemps = forecast.properties.periods.slice(0, 2).map(p => p.temperature);
+  const firstPeriods = forecast.properties.periods.slice(0, 2).map(p => p.temperature);
 
-  document.getElementById("highTemp").textContent = `${Math.max(...dayTemps)}°`;
-  document.getElementById("lowTemp").textContent = `${Math.min(...dayTemps)}°`;
+  document.getElementById("highTemp").textContent = `${Math.max(...firstPeriods)}°`;
+  document.getElementById("lowTemp").textContent = `${Math.min(...firstPeriods)}°`;
 
   document.getElementById("hourlyTable").innerHTML =
     hourly.properties.periods.slice(0, 9).map(p => `
       <tr>
         <td>${new Date(p.startTime).toLocaleTimeString([], { hour: "numeric" })}</td>
         <td><b>${p.temperature}°</b></td>
-        <td>
-          <img class="inline-icon" src="${p.icon}" alt="${p.shortForecast}">
-          ${p.shortForecast}
-        </td>
+        <td><span class="inline-icon">${getWeatherIcon(p.shortForecast, p.isDaytime)}</span>${p.shortForecast}</td>
         <td>${p.probabilityOfPrecipitation.value ?? 0}%</td>
         <td>${dewPoint}°</td>
       </tr>
@@ -402,10 +526,7 @@ async function loadWeather(lat, lon, customName = "") {
       .map(p => `
         <div class="daily-row">
           <b>${p.name.slice(0, 3).toUpperCase()}</b>
-          <span>
-            <img class="inline-icon" src="${p.icon}" alt="${p.shortForecast}">
-            ${p.temperature}°
-          </span>
+          <span>${getWeatherIcon(p.shortForecast, true)} ${p.temperature}°</span>
           <span>${p.shortForecast}</span>
           <span>${p.probabilityOfPrecipitation.value ?? 0}%</span>
         </div>
@@ -415,22 +536,32 @@ async function loadWeather(lat, lon, customName = "") {
 
   if (alerts.features.length > 0) {
     const alert = alerts.features[0].properties;
+
     alertBox.style.background = "#e86f00";
     alertBox.innerHTML = `
       ${alert.event}
       <br><br>
-      <small>UNTIL ${alert.ends ? new Date(alert.ends).toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit"
-      }) : "FURTHER NOTICE"}</small>
+      <small>
+        UNTIL ${alert.ends ? new Date(alert.ends).toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit"
+        }) : "FURTHER NOTICE"}
+      </small>
     `;
   } else {
     alertBox.style.background = "#777";
     alertBox.textContent = "NO ACTIVE ALERTS";
   }
 
+  await getSunData(lat, lon);
+
   document.getElementById("uvIndex").textContent = estimateUV();
-  document.getElementById("moonPhase").textContent = moonPhase();
+
+  document.getElementById("updatedText").textContent =
+    `Last updated: ${new Date().toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit"
+    })}`;
 }
 
 function estimateUV() {
@@ -438,30 +569,29 @@ function estimateUV() {
 
   if (hour < 9 || hour > 17) return "LOW";
   if (hour >= 11 && hour <= 15) return "HIGH";
-  return "MODERATE";
-}
 
-function moonPhase() {
-  const phases = ["NEW", "WAXING", "FIRST QTR", "WAXING", "FULL", "WANING", "LAST QTR", "WANING"];
-  const lp = 2551443;
-  const now = new Date() / 1000;
-  const newMoon = new Date("2001-01-24T13:07:00Z") / 1000;
-  const phase = Math.floor(((now - newMoon) % lp) / lp * 8);
-  return phases[phase];
+  return "MODERATE";
 }
 
 document.getElementById("searchForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  const input = document.getElementById("searchInput").value;
-
   try {
+    const input = document.getElementById("searchInput").value;
     const loc = await searchLocation(input);
     await loadWeather(loc.lat, loc.lon, loc.name);
   } catch (err) {
-    alert("Location not found. Try Atlanta, GA, 30303, or KATL.");
+    alert("Location not found. Try Jackson, MS, Atlanta, GA, 30303, KJAN, or KATL.");
     console.error(err);
   }
+});
+
+document.getElementById("modeToggle").addEventListener("click", function() {
+  document.body.classList.toggle("dark");
+
+  this.textContent = document.body.classList.contains("dark")
+    ? "LIGHT MODE"
+    : "DARK MODE";
 });
 
 function startApp() {
