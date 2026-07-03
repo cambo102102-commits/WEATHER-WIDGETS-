@@ -153,7 +153,6 @@ body {
   color: var(--text);
   font-size: 22px;
   padding: 10px;
-  text-transform: uppercase;
   outline: none;
 }
 
@@ -302,7 +301,7 @@ td b { font-size: 20px; }
 
   <div>
     <form id="searchForm" class="search">
-      <input id="searchInput" placeholder="SEARCH LOCATION" />
+      <input id="searchInput" placeholder="Search location" />
       <button type="submit">🔍</button>
     </form>
 
@@ -345,6 +344,38 @@ function cToF(c) {
   return Math.round((c * 9 / 5) + 32);
 }
 
+function titleCaseLocation(text) {
+  return text
+    .toLowerCase()
+    .split(" ")
+    .map(word => {
+      if (word.length <= 2) return word.toUpperCase();
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
+function normalizeSearchInput(query) {
+  query = query.trim();
+
+  if (/^K[A-Z0-9]{3}$/i.test(query)) {
+    return query.toUpperCase();
+  }
+
+  if (/^\d{5}$/.test(query)) {
+    return query;
+  }
+
+  if (query.includes(",")) {
+    const parts = query.split(",");
+    const city = titleCaseLocation(parts[0].trim());
+    const state = parts[1].trim().toUpperCase();
+    return `${city}, ${state}`;
+  }
+
+  return titleCaseLocation(query);
+}
+
 function getWeatherIcon(text = "", isDaytime = true) {
   text = text.toLowerCase();
 
@@ -377,7 +408,7 @@ function heatIndex(temp, rh) {
 }
 
 async function searchLocation(query) {
-  query = query.trim();
+  query = normalizeSearchInput(query);
 
   if (!query) throw new Error("Empty search");
 
@@ -578,7 +609,11 @@ document.getElementById("searchForm").addEventListener("submit", async function(
 
   try {
     const input = document.getElementById("searchInput").value;
-    const loc = await searchLocation(input);
+    const cleanedInput = normalizeSearchInput(input);
+
+    document.getElementById("searchInput").value = cleanedInput;
+
+    const loc = await searchLocation(cleanedInput);
     await loadWeather(loc.lat, loc.lon, loc.name);
   } catch (err) {
     alert("Location not found. Try Jackson, MS, Atlanta, GA, 30303, KJAN, or KATL.");
